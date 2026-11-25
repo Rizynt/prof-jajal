@@ -1,0 +1,1058 @@
+/* ==========================================================================
+   Design Tokens & Themes (Cerah / Gelap)
+   Palette capped to neutral surfaces + 1 Copper-Amber accent (R-29, R-25).
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  --bg: #F5F3EE;
+  --bg-rgb: 245, 243, 238;
+  --surface: #FFFFFF;
+  --surface-alt: #EAE6DC;
+  --ink: #121417;
+  --ink-muted: #464C54;
+  --accent: #B83B08;
+  --accent-ink: #FFFFFF;
+  --border: #767E89;
+  --border-subtle: rgba(18, 20, 23, 0.16);
+  --shimmer-base: #E4DFD4;
+  --shimmer-highlight: #F8F6F1;
+  --shadow-elevated: 0 18px 40px -24px rgba(18, 20, 23, 0.28);
+  --focus-ring: #B83B08;
+  --hero-ring: rgba(184, 59, 8, 0.22);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0E1116;
+  --bg-rgb: 14, 17, 22;
+  --surface: #161B22;
+  --surface-alt: #1F2630;
+  --ink: #F3F4F6;
+  --ink-muted: #B0B8C4;
+  --accent: #FB923C;
+  --accent-ink: #121417;
+  --border: #6B7280;
+  --border-subtle: rgba(243, 244, 246, 0.18);
+  --shimmer-base: #212834;
+  --shimmer-highlight: #313B4C;
+  --shadow-elevated: 0 22px 44px -24px rgba(0, 0, 0, 0.65);
+  --focus-ring: #FB923C;
+  --hero-ring: rgba(251, 146, 60, 0.24);
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background-color: var(--bg);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Interactive affordances (R-39) */
+a[href],
+button,
+[role="button"],
+[role="tab"],
+[role="switch"],
+summary,
+select,
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Visible keyboard focus across both themes (R-32, R-34) */
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  padding: 0.75rem 1.25rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+.container {
+  width: min(1120px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+/* ==========================================================================
+   View Transitions & Radial Bubble Theme Reveal ("Menggelembung Masuk")
+   ========================================================================== */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+.theme-bubble-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  clip-path: circle(0px at 50% 50%);
+}
+
+.theme-bubble-overlay.is-animating {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(var(--bg-rgb), 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 70px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding-inline: 0.15rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: "Syne", "Segoe UI", sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background-color: var(--ink);
+  color: var(--bg);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .brand-text {
+    display: inline;
+  }
+}
+
+.primary-nav {
+  display: none;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 0.95rem;
+  border-radius: 8px;
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--ink);
+  background-color: var(--surface-alt);
+}
+
+.nav-link.is-active {
+  color: var(--ink);
+  background-color: var(--surface-alt);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+/* Segmented Theme Toggle (Cerah / Gelap) */
+.theme-switcher {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 999px;
+  background-color: var(--surface-alt);
+  border: 1px solid var(--border);
+}
+
+.theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 40px;
+  padding: 0.3rem 0.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.16s ease;
+}
+
+@media (min-width: 480px) {
+  .header-actions {
+    gap: 0.625rem;
+  }
+
+  .theme-switcher {
+    padding: 3px;
+  }
+
+  .theme-btn {
+    gap: 0.375rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+.theme-btn:hover {
+  color: var(--ink);
+}
+
+.theme-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-btn[aria-pressed="true"] {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.theme-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.menu-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.mobile-menu {
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--surface);
+  padding: 0.75rem 1rem 1rem;
+}
+
+.mobile-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.is-active {
+  background-color: var(--surface-alt);
+  color: var(--accent);
+}
+
+@media (min-width: 760px) {
+  .primary-nav {
+    display: block;
+  }
+
+  .menu-toggle,
+  .mobile-menu {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Button Micro-Interaction Animations
+   ========================================================================== */
+
+.btn-anim {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.btn-anim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.24) 48%,
+    transparent 76%
+  );
+  transform: translateX(-125%);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.btn-anim:hover {
+  transform: translateY(-2px);
+}
+
+.btn-anim:hover::after {
+  transform: translateX(125%);
+}
+
+.btn-anim:active {
+  transform: translateY(1px) scale(0.975);
+}
+
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: currentColor;
+  opacity: 0.18;
+  transform: scale(0);
+  animation: btn-ripple-expand 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes btn-ripple-expand {
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1.5px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 24px -10px var(--accent);
+}
+
+.btn-outline {
+  background-color: var(--surface);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.btn-outline:hover {
+  border-color: var(--ink);
+  background-color: var(--surface-alt);
+}
+
+/* ==========================================================================
+   Hero Section: Foto Membelakangi Nama & Warna Kontras Berlawanan
+   ========================================================================== */
+
+.hero-section {
+  padding-top: clamp(1.25rem, 3vw, 2.5rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.hero-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: clamp(460px, 68vw, 620px);
+  padding-top: 0.5rem;
+}
+
+/* Single deliberate geometric ring behind the portrait */
+.hero-backdrop-ring {
+  position: absolute;
+  top: clamp(2.25rem, 6vw, 4rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(250px, 46vw, 420px);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  border: 2px solid var(--hero-ring);
+  background: radial-gradient(circle at 50% 45%, var(--surface-alt) 0%, transparent 72%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Photo sits behind the hero name (z-index 1 < z-index 2) */
+.hero-photo-layer {
+  position: relative;
+  z-index: 1;
+  width: clamp(270px, 48vw, 420px);
+  aspect-ratio: 819 / 1024;
+  margin-top: clamp(-3.2rem, -6vw, -4.5rem);
+  margin-bottom: clamp(-7rem, -12vw, -8.5rem);
+  pointer-events: none;
+}
+
+.hero-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center top;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.14));
+}
+
+/* Nameplate in front of the photo (z-index 2) with guaranteed contrast scrim */
+.hero-name-layer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+  padding: clamp(2.4rem, 5vw, 3.4rem) 1rem 1.25rem;
+}
+
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgb(var(--bg-rgb)) 62%,
+    rgba(var(--bg-rgb), 0.94) 84%,
+    rgba(var(--bg-rgb), 0) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-kicker {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Opposite contrasting ink in Light (#121417) vs Dark (#F3F4F6) */
+.hero-title {
+  margin: 0;
+  font-family: "Syne", "Segoe UI", sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.15rem, 6.4vw, 4.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  transition: color 0.3s ease;
+}
+
+.hero-subtitle {
+  margin: 0.9rem auto 0;
+  max-width: 46ch;
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  color: var(--ink-muted);
+}
+
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+
+/* ==========================================================================
+   Section Shared Headers
+   ========================================================================== */
+
+.section-head {
+  margin-bottom: 1.5rem;
+}
+
+.section-eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.section-title {
+  margin: 0;
+  font-family: "Syne", "Segoe UI", sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.55rem, 3.2vw, 2.25rem);
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   Social & Contact Section
+   ========================================================================== */
+
+.connect-section {
+  padding-block: clamp(2rem, 4vw, 3.25rem);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--surface-alt);
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.9rem;
+}
+
+.social-card-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 68px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.social-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-elevated);
+}
+
+.social-icon-wrap {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: var(--surface-alt);
+  color: var(--ink);
+  flex-shrink: 0;
+  transition: background-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
+}
+
+.social-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+}
+
+.social-card:hover .social-icon-wrap {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+  transform: scale(1.06);
+}
+
+.social-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.social-name {
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.25;
+}
+
+.social-handle {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.social-action {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.social-card:hover .social-action {
+  transform: translateX(2px);
+}
+
+.copy-email-btn {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0.45rem 0.95rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.copy-email-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.copy-status {
+  margin: 0.75rem 0 0;
+  min-height: 1.4em;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   ABOUT ME & Photo 2 Beside It
+   ========================================================================== */
+
+.about-section {
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+@media (min-width: 820px) {
+  .about-grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+}
+
+.about-title {
+  margin-bottom: 1.25rem;
+}
+
+.about-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 1.03rem;
+  color: var(--ink);
+}
+
+.about-prose p {
+  margin: 0;
+}
+
+/* Interactive Tabs + Skeleton Shimmer Micro-Interaction */
+.focus-panel {
+  margin-top: 2rem;
+  padding: 1.15rem;
+  border-radius: 14px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+}
+
+.focus-panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.focus-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.focus-tab {
+  min-height: 44px;
+  padding: 0.5rem 0.95rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--surface-alt);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.focus-tab.is-active {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.refresh-chip {
+  min-height: 44px;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: transparent;
+  color: var(--ink-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.refresh-chip:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.focus-tabpanel {
+  min-height: 112px;
+}
+
+/* Skeleton Shimmer Animation */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--shimmer-base);
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--shimmer-highlight) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: skeleton-sweep 1.25s infinite ease-in-out;
+}
+
+@keyframes skeleton-sweep {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-block: 0.25rem;
+}
+
+.skeleton-line {
+  display: block;
+  height: 18px;
+  border-radius: 6px;
+}
+
+.skeleton-line.is-short {
+  width: 45%;
+}
+
+.skeleton-line.is-medium {
+  width: 72%;
+}
+
+.skeleton-line.is-long {
+  width: 94%;
+}
+
+.fact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.fact-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.fact-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.fact-row dt {
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.fact-row dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* About Photo Frame (Foto kedua di sebelah About Me) */
+.portrait-frame {
+  position: relative;
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+}
+
+.photo-skeleton {
+  position: absolute;
+  inset: 0 0 48px 0;
+  z-index: 2;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.portrait-frame.is-loaded .photo-skeleton {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.about-photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 42%;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.portrait-frame.is-loaded .about-photo {
+  opacity: 1;
+}
+
+.photo-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  aspect-ratio: 3 / 4;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--ink);
+}
+
+.photo-error[hidden] {
+  display: none;
+}
+
+.portrait-caption {
+  padding: 0.8rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--surface);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding-block: 1.5rem;
+  background-color: var(--surface);
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.footer-copy {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.footer-top-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.footer-top-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   Reduced Motion Accessibility (R-39)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .btn-anim,
+  .btn-anim::after,
+  .skeleton-shimmer::after,
+  .social-icon-wrap,
+  .social-action,
+  .theme-btn {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .btn-anim:hover,
+  .btn-anim:active {
+    transform: none;
+  }
+}
